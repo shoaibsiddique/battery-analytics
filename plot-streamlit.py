@@ -64,17 +64,19 @@ if uploaded_file:
     axes[2].set_ylabel('Voltage (V)')
     axes[2].set_title('Input Voltage (vin) Over Time')
     axes[2].legend()
-    
-    axes[3].plot(filtered_data['timestamp'], filtered_data['temperature'], label='Temperature', color='orange')
-    axes[3].set_ylabel('Temperature (°C)')
-    axes[3].set_title('Battery Temperature Over Time')
+
+    axes[3].plot(filtered_data['timestamp'], filtered_data['capacity'], label='Capacity', color='purple')
+    axes[3].set_ylabel('Capacity')
+    axes[3].set_title('Battery Capacity Over Time')
+    axes[3].set_xlabel('Timestamp')
     axes[3].legend()
     
-    axes[4].plot(filtered_data['timestamp'], filtered_data['capacity'], label='Capacity', color='purple')
-    axes[4].set_ylabel('Capacity')
-    axes[4].set_title('Battery Capacity Over Time')
-    axes[4].set_xlabel('Timestamp')
+    axes[4].plot(filtered_data['timestamp'], filtered_data['temperature'], label='Temperature', color='orange')
+    axes[4].set_ylabel('Temperature (°C)')
+    axes[4].set_title('Battery Temperature Over Time')
     axes[4].legend()
+    
+
     
     plt.xticks(rotation=45)
     plt.tight_layout()
