@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 import streamlit as st
 
 # Streamlit App Title
@@ -13,7 +14,7 @@ if uploaded_file:
     battery_data = pd.read_csv(
         uploaded_file,
         header=None,
-        names=["timestamp", "vin", "vbat", "charge_current", "temperature", "capacity"]
+        names=["timestamp", "vbat", "discharge_current", "charge_current", "temperature", "capacity_percentage"]
     )
     
     # Parse timestamps
@@ -46,43 +47,111 @@ if uploaded_file:
     else:
         filtered_data = battery_data
 
-    # Plot Parameters
-    st.subheader("Parameter Plots")
-    fig, axes = plt.subplots(5, 1, figsize=(15, 12), sharex=True)
-    
-    axes[0].plot(filtered_data['timestamp'], filtered_data['vbat'], label='vbat (Battery Voltage)', color='blue')
+    # Plot Parameters - Default Matplotlib
+    st.subheader("Default Matplotlib Plots")
+    fig, axes = plt.subplots(5, 1, figsize=(15, 15), sharex=True)
+
+    # Plot vbat (Battery Voltage)
+    axes[0].plot(filtered_data['timestamp'], filtered_data['vbat'], label='Battery Voltage (vbat)', color='blue')
     axes[0].set_ylabel('Voltage (V)')
     axes[0].set_title('Battery Voltage (vbat) Over Time')
     axes[0].legend()
     
-    axes[1].plot(filtered_data['timestamp'], filtered_data['charge_current'], label='Charge Current', color='green')
+    # Plot discharge_current
+    axes[1].plot(filtered_data['timestamp'], filtered_data['discharge_current'], label='Discharge Current', color='cyan')
     axes[1].set_ylabel('Current (A)')
-    axes[1].set_title('Charge Current Over Time')
+    axes[1].set_title('Discharge Current Over Time')
     axes[1].legend()
     
-    axes[2].plot(filtered_data['timestamp'], filtered_data['vin'], label='vin (Input Voltage)', color='red')
-    axes[2].set_ylabel('Voltage (V)')
-    axes[2].set_title('Input Voltage (vin) Over Time')
+    # Plot charge_current
+    axes[2].plot(filtered_data['timestamp'], filtered_data['charge_current'], label='Charge Current', color='green')
+    axes[2].set_ylabel('Current (A)')
+    axes[2].set_title('Charge Current Over Time')
     axes[2].legend()
 
-    axes[3].plot(filtered_data['timestamp'], filtered_data['capacity'], label='Capacity', color='purple')
-    axes[3].set_ylabel('Capacity')
+    # Plot capacity_percentage
+    axes[3].plot(filtered_data['timestamp'], filtered_data['capacity_percentage'], label='Capacity Percentage', color='purple')
+    axes[3].set_ylabel('Capacity (%)')
     axes[3].set_title('Battery Capacity Over Time')
-    axes[3].set_xlabel('Timestamp')
     axes[3].legend()
     
+    # Plot temperature
     axes[4].plot(filtered_data['timestamp'], filtered_data['temperature'], label='Temperature', color='orange')
     axes[4].set_ylabel('Temperature (°C)')
     axes[4].set_title('Battery Temperature Over Time')
     axes[4].legend()
     
-
-    
     plt.xticks(rotation=45)
     plt.tight_layout()
-    
+
+    # Show the plots in Streamlit
     st.pyplot(fig)
     
+    # Add Checkbox for Interactive Plot
+    if st.checkbox("Show Interactive Plot"):
+        st.subheader("Interactive Parameter Plots")
+
+        # Create subplots for each parameter
+        fig = go.Figure()
+
+        # Add vbat (Battery Voltage)
+        fig.add_trace(go.Scatter(
+            x=filtered_data['timestamp'],
+            y=filtered_data['vbat'],
+            mode='lines+markers',
+            name='Battery Voltage (vbat)',
+            hovertemplate="Time: %{x}<br>Voltage: %{y} V"
+        ))
+
+        # Add discharge_current
+        fig.add_trace(go.Scatter(
+            x=filtered_data['timestamp'],
+            y=filtered_data['discharge_current'],
+            mode='lines+markers',
+            name='Discharge Current',
+            hovertemplate="Time: %{x}<br>Discharge Current: %{y} A"
+        ))
+
+        # Add charge_current
+        fig.add_trace(go.Scatter(
+            x=filtered_data['timestamp'],
+            y=filtered_data['charge_current'],
+            mode='lines+markers',
+            name='Charge Current',
+            hovertemplate="Time: %{x}<br>Charge Current: %{y} A"
+        ))
+
+        # Add capacity_percentage
+        fig.add_trace(go.Scatter(
+            x=filtered_data['timestamp'],
+            y=filtered_data['capacity_percentage'],
+            mode='lines+markers',
+            name='Capacity Percentage',
+            hovertemplate="Time: %{x}<br>Capacity: %{y} %"
+        ))
+
+        # Add temperature
+        fig.add_trace(go.Scatter(
+            x=filtered_data['timestamp'],
+            y=filtered_data['temperature'],
+            mode='lines+markers',
+            name='Temperature',
+            hovertemplate="Time: %{x}<br>Temperature: %{y} °C"
+        ))
+
+        # Customize layout
+        fig.update_layout(
+            title="Battery Data Parameters Over Time",
+            xaxis_title="Timestamp",
+            yaxis_title="Values",
+            hovermode="x unified",
+            template="plotly_white",
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        )
+
+        # Display the interactive plot
+        st.plotly_chart(fig, use_container_width=True)
+
     # Display Filtered Data
     st.subheader("Filtered Data")
     st.dataframe(filtered_data)
