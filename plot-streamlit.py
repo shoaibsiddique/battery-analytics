@@ -57,23 +57,27 @@ if uploaded_file:
     axes[0].set_title('Battery Voltage (vbat) Over Time')
     axes[0].legend()
     
-    # Plot discharge_current
-    axes[1].plot(filtered_data['timestamp'], filtered_data['discharge_current'], label='Discharge Current', color='cyan')
+    # Plot charge_current
+    axes[1].plot(filtered_data['timestamp'], filtered_data['charge_current'], label='Charge Current', color='green')
     axes[1].set_ylabel('Current (A)')
-    axes[1].set_title('Discharge Current Over Time')
+    axes[1].set_title('Charge Current Over Time')
     axes[1].legend()
     
-    # Plot charge_current
-    axes[2].plot(filtered_data['timestamp'], filtered_data['charge_current'], label='Charge Current', color='green')
-    axes[2].set_ylabel('Current (A)')
-    axes[2].set_title('Charge Current Over Time')
-    axes[2].legend()
-
     # Plot capacity_percentage
-    axes[3].plot(filtered_data['timestamp'], filtered_data['capacity_percentage'], label='Capacity Percentage', color='purple')
-    axes[3].set_ylabel('Capacity (%)')
-    axes[3].set_title('Battery Capacity Over Time')
+    axes[2].plot(filtered_data['timestamp'], filtered_data['capacity_percentage'], label='Capacity Percentage', color='purple')
+    axes[2].set_ylabel('Capacity (%)')
+    axes[2].set_title('Battery Capacity Over Time')
+    axes[2].legend()
+    
+    # Plot discharge_current
+    axes[3].plot(filtered_data['timestamp'], filtered_data['discharge_current'], label='Discharge Current', color='cyan')
+    axes[3].set_ylabel('Current (A)')
+    axes[3].set_title('Discharge Current Over Time')
     axes[3].legend()
+    
+
+
+
     
     # Plot temperature
     axes[4].plot(filtered_data['timestamp'], filtered_data['temperature'], label='Temperature', color='orange')
