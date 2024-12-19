@@ -48,7 +48,7 @@ if uploaded_file:
         filtered_data = battery_data
 
     # Plot Parameters - Default Matplotlib
-    st.subheader("Default Matplotlib Plots")
+    st.subheader("Default Plots")
     fig, axes = plt.subplots(5, 1, figsize=(15, 15), sharex=True)
 
     # Plot vbat (Battery Voltage)
