@@ -48,7 +48,7 @@ if uploaded_file:
 
     # Plot Parameters
     st.subheader("Parameter Plots")
-    fig, axes = plt.subplots(4, 1, figsize=(15, 10), sharex=True)
+    fig, axes = plt.subplots(5, 1, figsize=(15, 12), sharex=True)
     
     axes[0].plot(filtered_data['timestamp'], filtered_data['vbat'], label='vbat (Battery Voltage)', color='blue')
     axes[0].set_ylabel('Voltage (V)')
@@ -69,6 +69,12 @@ if uploaded_file:
     axes[3].set_ylabel('Temperature (°C)')
     axes[3].set_title('Battery Temperature Over Time')
     axes[3].legend()
+    
+    axes[4].plot(filtered_data['timestamp'], filtered_data['capacity'], label='Capacity', color='purple')
+    axes[4].set_ylabel('Capacity')
+    axes[4].set_title('Battery Capacity Over Time')
+    axes[4].set_xlabel('Timestamp')
+    axes[4].legend()
     
     plt.xticks(rotation=45)
     plt.tight_layout()
